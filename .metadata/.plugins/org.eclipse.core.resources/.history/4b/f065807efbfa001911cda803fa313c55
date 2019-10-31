@@ -1,0 +1,18 @@
+/******************************************************************************
+ *
+ * Module: HMI ECU
+ *
+ * File Name: HMI_ECU.h
+ *
+ * Description: header file for	HMI Module.
+ *
+ * Author: Amr Ramadan
+ ******************************************************************************/
+
+#ifndef HMI_ECU_H_
+#define HMI_ECU_H_
+
+
+
+
+#endif /* HMI_ECU_H_ */

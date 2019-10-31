@@ -1,0 +1,100 @@
+/******************************************************************************
+ *
+ * Module: HMI ECU
+ *
+ * File Name: HMI_ECU.c
+ *
+ * Description: source file for HMI Module.
+ *
+ * Author: Amr Ramadan
+ ******************************************************************************/
+#include "HMI_ECU.h"
+
+uint8 feedback;
+uint8 key;
+uint8 counter = LOW;
+uint8 buffer_1[HMI_ECU_BUFFER_SIZE];
+uint8 buffer_2[HMI_ECU_BUFFER_SIZE];
+void new_PassCode(void);
+void Open_door(void);
+
+int main() {
+	UART_init();
+	LCD_init();
+	new_PassCode();
+	while (HIGH) {
+
+	/*	feedback = UART_receiveByte();
+		if (feedback != 0x01) {
+
+		}
+		*/
+			LCD_displayStringRowCol("'+' Open Door", 0, 0);
+			LCD_displayStringRowCol("'-' Change Code", 1, 0);
+			key = Keypad_getPressedKey();
+
+			if (key == '+') {
+				Open_door();
+				_delay_ms(2000);
+			} else if (key == '-') {
+				new_PassCode();
+			}
+	}
+}
+
+void new_PassCode(void) {
+	LCD_displayStringRowCol("Please Enter", 0, 3);
+	LCD_displayStringRowCol("Passcode: ", 1, 1);
+
+	while (counter < HMI_ECU_PASSCODE_SIZE) {
+		_delay_ms(250);
+		key = Keypad_getPressedKey();
+		if (key >= LOW && key <= HMI_ECU_PASSCODE_MAX_NUMBER) {
+			buffer_1[counter] = key;
+			LCD_integerToString(key);
+			counter = counter + HIGH;
+		}
+	}
+	counter = LOW;
+	buffer_1[HMI_ECU_PASSCODE_SIZE] = '+';
+
+	UART_sendByte(MC1_READY);
+	UART_sendString(buffer_1);
+
+	LCD_clearScreen();
+	_delay_ms(100);
+	UART_sendByte(0x01);
+}
+
+void Open_door(void) {
+
+	LCD_clearScreen();
+	_delay_ms(50);
+	LCD_displayStringRowCol("Please Enter  ", 0, 0);
+	LCD_displayStringRowCol("Passcode: ", 1, 0);
+	counter = LOW;
+	while (counter < HMI_ECU_PASSCODE_SIZE) {
+		_delay_ms(250);
+		key = Keypad_getPressedKey();
+		if (key >= LOW && key <= HMI_ECU_PASSCODE_MAX_NUMBER) {
+			buffer_2[counter] = key;
+			LCD_integerToString(key);
+			counter = counter + HIGH;
+		}
+	}
+	counter = LOW;
+	buffer_2[HMI_ECU_PASSCODE_SIZE] = '+';
+
+	_delay_ms(100);
+	UART_sendByte(MC1_READY);
+	UART_sendString(buffer_2);
+	LCD_clearScreen();
+	_delay_ms(50);
+	feedback = UART_receiveByte();
+	if (feedback == LOW) {
+		LCD_displayString("Welcome");
+		_delay_ms(1500);
+	} else
+		LCD_displayString("Incorrect Passcode");
+}
+

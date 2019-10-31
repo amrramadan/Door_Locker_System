@@ -1,0 +1,17 @@
+/******************************************************************************
+ *
+ * Module: HMI ECU configuration
+ *
+ * File Name: HMI_ECU_CFG.h
+ *
+ * Description: configuration file for	HMI Module.
+ *
+ * Author: Amr Ramadan
+ ******************************************************************************/
+
+#ifndef HMI_ECU_CFG_H_
+#define HMI_ECU_CFG_H_
+
+
+
+#endif /* HMI_ECU_CFG_H_ */

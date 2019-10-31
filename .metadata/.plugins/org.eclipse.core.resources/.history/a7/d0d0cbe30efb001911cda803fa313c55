@@ -1,0 +1,74 @@
+/******************************************************************************
+ *
+ * Module: HMI ECU
+ *
+ * File Name: HMI_ECU.c
+ *
+ * Description: source file for HMI Module.
+ *
+ * Author: Amr Ramadan
+ ******************************************************************************/
+#include "HMI_ECU.h"
+uint8 feedback;
+uint8 key;
+uint8 counter = LOW;
+uint8 buffer_1[HMI_ECU_BUFFER_SIZE];
+uint8 buffer_2[HMI_ECU_BUFFER_SIZE];
+
+int main() {
+	UART_init();
+	LCD_init();
+
+	LCD_displayStringRowCol("Please Enter new", 0, 3);
+	LCD_displayStringRowCol("Passcode: ", 1, 1);
+
+	while (HMI_ECU_PASSCODE_SIZE != counter) {
+		key = Keypad_getPressedKey();
+		_delay_ms(300);
+		if (key >= LOW || key <= HMI_ECU_PASSCODE_MAX_NUMBER) {
+			buffer_1[counter] = key;
+			LCD_integerToString(key);
+			counter = counter + HIGH;
+		}
+	}
+	counter = LOW;
+
+	buffer_1[HMI_ECU_PASSCODE_SIZE] = '+';
+
+	UART_sendByte(MC1_READY);
+	UART_sendString(buffer_1);
+
+
+	while (HIGH) {
+		LCD_displayStringRowCol("'+' Open Door", 0, 3);
+		LCD_displayStringRowCol("'-' Change Code", 1, 1);
+		_delay_ms(100);
+		LCD_clearScreen();
+		while (HMI_ECU_PASSCODE_SIZE != counter) {
+				key = Keypad_getPressedKey();
+				_delay_ms(300);
+				if (key == '+') {
+					buffer_1[counter] = key;
+					LCD_integerToString(key);
+					counter = counter + HIGH;
+				}
+			}
+			counter = LOW;
+			buffer_2[HMI_ECU_PASSCODE_SIZE] = '+';
+
+			UART_sendByte(MC1_READY);
+			UART_sendString(buffer_2);
+			LCD_clearScreen();
+			feedback=UART_receiveByte();
+			if(feedback == LOW)
+			{
+				LCD_displayString("Welcome");
+			}
+			else
+				LCD_displayString("Incorrect Passcode");
+
+
+	}
+
+}
+

@@ -1,0 +1,43 @@
+03:08:52 **** Incremental Build of configuration Debug for project Control_ECU ****
+make all 
+Building file: ../C_ECU.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega16 -DF_CPU=1000000UL -MMD -MP -MF"C_ECU.d" -MT"C_ECU.o" -c -o "C_ECU.o" "../C_ECU.c"
+In file included from ../micro_config.h:18,
+                 from ../C_ECU.h:17,
+                 from ../C_ECU.c:11:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+../C_ECU.c: In function 'main':
+../C_ECU.c:23: warning: implicit declaration of function 'EEPROM_init'
+../C_ECU.c:38: warning: implicit declaration of function 'EEPROM_readByte'
+../C_ECU.c:46: warning: pointer targets in passing argument 1 of 'strcmp' differ in signedness
+../C_ECU.c:46: warning: pointer targets in passing argument 2 of 'strcmp' differ in signedness
+Finished building: ../C_ECU.c
+ 
+Building target: Control_ECU.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,Control_ECU.map -mmcu=atmega16 -o "Control_ECU.elf"  ./C_ECU.o ./external_eeprom.o ./i2c.o ./timer.o ./uart.o   
+Finished building target: Control_ECU.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S Control_ECU.elf  >"Control_ECU.lss"
+Finished building: Control_ECU.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega16 Control_ECU.elf
+AVR Memory Usage
+----------------
+Device: atmega16
+
+Program:    4916 bytes (30.0% Full)
+(.text + .data + .bootloader)
+
+Data:         30 bytes (2.9% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+03:08:52 Build Finished. 0 errors, 5 warnings. (took 675ms)
+

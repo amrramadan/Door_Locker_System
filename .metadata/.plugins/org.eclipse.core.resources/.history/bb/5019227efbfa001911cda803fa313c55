@@ -1,0 +1,17 @@
+/******************************************************************************
+ *
+ * Module: Control ECU
+ *
+ * File Name: C_ECU.h
+ *
+ * Description: Header file for Control ECU Module.
+ *
+ * Author: Amr Ramadan
+ ******************************************************************************/
+
+#ifndef C_ECU_H_
+#define C_ECU_H_
+
+
+
+#endif /* C_ECU_H_ */
